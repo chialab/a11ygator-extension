@@ -99,7 +99,7 @@ function handleButtons() {
                     target.classList.remove('active');
                 } else {
                     document.querySelectorAll(`[data-selector].active`).forEach((element) => element.classList.remove('active'));
-                    chrome.devtools.inspectedWindow.eval(`inspect($('${target.dataset.selector}'))`);
+                    chrome.devtools.inspectedWindow.eval(`inspect($$('${target.dataset.selector}')[0])`);
                     currentSelector = target.dataset.selector;
                     target.classList.add('active');
                 }
@@ -112,7 +112,7 @@ function handleButtons() {
             }
             let target = event.target.closest('[data-selector]');
             if (target && hoverSelector !== target.dataset.selector) {
-                chrome.devtools.inspectedWindow.eval(`inspect($('${target.dataset.selector}'))`);
+                chrome.devtools.inspectedWindow.eval(`inspect($$('${target.dataset.selector}')[0])`);
                 hoverSelector = target.dataset.selector;
             }
         });
