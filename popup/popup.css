@@ -1,0 +1,58 @@
+@import url('/resources/loader.css');
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    padding: 1rem;
+    width: 20rem;
+}
+
+*,
+*::before,
+*:after {
+    box-sizing: border-box;
+}
+
+h1 {
+    margin: 0;
+}
+
+hr {
+    margin: 1rem 0 0.5rem 0;
+    border: 0;
+    border-bottom: solid 1px #ccc;
+}
+
+h2 {
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+p {
+    line-height: 1.5em;
+}
+
+.errors,
+.warnings,
+.notices {
+    display: block;
+}
+
+.errors {
+    color: #E74C3C;
+}
+
+.warnings {
+    color: #F39C12;
+}
+
+.notices {
+    color: #3498DB;
+}
+
+#report:not(:empty) + #loader {
+    display: none;
+}

@@ -1,0 +1,31 @@
+{
+  "name": "Allygator",
+  "description": "Validate the accessibility of your website using Allygator against W3C's Web Content Accessibility Guidelines.",
+  "manifest_version": 2,
+  "version": "1.0",
+  "minimum_chrome_version": "10.0",
+  "icons": {
+    "128": "resources/icon.png"
+  },
+  "browser_action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "128": "resources/icon.png"
+    }
+  },
+  "options_ui": {
+    "page": "settings/settings.html",
+    "open_in_tab": false
+  },
+  "background": {
+    "scripts": [
+      "background/background.js"
+    ]
+  },
+  "devtools_page": "devtools/devtools.html",
+  "permissions": [
+    "<all_urls>",
+    "storage",
+    "tabs"
+  ]
+}

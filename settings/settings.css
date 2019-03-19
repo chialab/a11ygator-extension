@@ -1,0 +1,27 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+}
+
+.wrapper {
+    width: 50rem;
+    max-width: 100%;
+    padding: 1rem;
+    margin: 0 auto;
+}
+
+fieldset {
+    padding: 1rem;
+    border: solid 1px #ccc;
+}
+
+legend {
+    padding: 0 1rem;
+    text-transform: uppercase;
+}
+
+label {
+    font-weight: 500;
+}
