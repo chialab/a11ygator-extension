@@ -23,9 +23,19 @@ Check out the repository and [load the unpacked extension](https://developer.chr
 
 ### Build
 
+Create a `.crx` file:
+
 * Navigate to `chrome://extensions/`
 * Click "Pack extension" and browse to the repository
 * Click the "Pack extension" button
+
+Build for publication:
+
+* Run `make pack` in the root of the project
+
+## Publish
+
+* Navigate to [https://chrome.google.com/webstore/developer/dashboard](https://chrome.google.com/webstore/developer/dashboard)
 
 ## Credits
 
