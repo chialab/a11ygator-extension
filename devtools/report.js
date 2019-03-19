@@ -68,14 +68,14 @@ async function handleReport(response) {
 }
 
 function handleButtons() {
-    let currentSelector = false;
+    let currentSelector = null;
+    let hoverSelector = null;
 
     document.querySelectorAll('nav button').forEach((button) => {
         button.addEventListener('click', () => {
-            if (currentSelector) {
-                document.querySelector(`[data-selector="${currentSelector}"]`).classList.remove('active');
-                currentSelector = false;
-            }
+            document.querySelectorAll(`[data-selector].active`).forEach((element) => element.classList.remove('active'));
+            currentSelector = null;
+            hoverSelector = null;
             document.body.classList.remove('filter-errors', 'filter-warnings', 'filter-notices');
             if (button.value) {
                 document.body.classList.add(`filter-${button.value}`);
@@ -92,14 +92,13 @@ function handleButtons() {
 
         document.addEventListener('click', (event) => {
             let target = event.target.closest('[data-selector]');
+            hoverSelector = null;
             if (target) {
                 if (currentSelector === target.dataset.selector) {
                     currentSelector = null;
                     target.classList.remove('active');
                 } else {
-                    if (currentSelector) {
-                        document.querySelector(`[data-selector="${currentSelector}"]`).classList.remove('active');
-                    }
+                    document.querySelectorAll(`[data-selector].active`).forEach((element) => element.classList.remove('active'));
                     chrome.devtools.inspectedWindow.eval(`inspect($('${target.dataset.selector}'))`);
                     currentSelector = target.dataset.selector;
                     target.classList.add('active');
@@ -112,8 +111,9 @@ function handleButtons() {
                 return;
             }
             let target = event.target.closest('[data-selector]');
-            if (target) {
+            if (target && hoverSelector !== target.dataset.selector) {
                 chrome.devtools.inspectedWindow.eval(`inspect($('${target.dataset.selector}'))`);
+                hoverSelector = target.dataset.selector;
             }
         });
     }

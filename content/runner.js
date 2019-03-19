@@ -48,7 +48,7 @@
         3: 'notice'
     };
 
-    function run() {
+    function innerRun() {
         clearTimeout(timeout);
         timeout = setTimeout(async () => {
             try {
@@ -87,20 +87,25 @@
         childList: true,
         subtree: true
     };
-    let observer = new MutationObserver(run);
-    observer.observe(document.body, config);
+    let observer;
 
     window.a11ygator = {
-        run: run,
+        run: () => {
+            if (!observer) {
+                observer = new MutationObserver(innerRun);
+                observer.observe(document.body, config);
+            }
+            innerRun();
+        },
         settings: settings,
         set(options) {
             Object.assign(settings, options);
-            run();
+            innerRun();
         },
         get result() {
             return lastError || lastResult;
         },
     };
 
-    run();
+    innerRun();
 })();

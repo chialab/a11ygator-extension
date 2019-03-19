@@ -56,7 +56,7 @@ async function updateSettings(tab, settings) {
     });
 }
 
-async function checkStatus(tab) {
+async function checkButtonStatus(tab) {
     if (!tab) {
         return;
     }
@@ -71,9 +71,19 @@ async function checkStatus(tab) {
     if (tab.id in reports) {
         handleReport(reports[tab.id]);
     }
+}
 
+async function checkStatus(tab) {
+    if (!tab) {
+        return;
+    }
+
+    await checkButtonStatus(tab);
     await addContentFile(tab, 'content/HTMLCS.js');
     await addContentFile(tab, 'content/runner.js');
+    await executeScript(tab, {
+        code: 'window.a11ygator.run()',
+    });
 
     chrome.browserAction.enable(tab.id);
     let settings = await getStorage({ standard: 'WCAG2AA' });
@@ -137,22 +147,22 @@ async function deleteStatus(id) {
 
 chrome.runtime.onInstalled.addListener(async () => {
     let currentTab = await getCurrentTab();
-    await checkStatus(currentTab);
+    await checkButtonStatus(currentTab);
 });
 
 chrome.runtime.onMessage.addListener(handleMessage);
 
 chrome.tabs.onUpdated.addListener((id, info, tab) => {
-    checkStatus(tab);
+    checkButtonStatus(tab);
 });
 
 chrome.tabs.onCreated.addListener((tab) => {
-    checkStatus(tab);
+    checkButtonStatus(tab);
 });
 
 chrome.tabs.onActivated.addListener(async ({ tabId }) => {
     let tab = await getTabById(tabId);
-    checkStatus(tab);
+    checkButtonStatus(tab);
 });
 
 chrome.tabs.onRemoved.addListener((id) => {
