@@ -1,17 +1,8 @@
 const reports = {};
 
-function removeBadge() {
-    chrome.browserAction.setBadgeText({ text: '' });
-}
-
-function setBadge(number, color) {
-    chrome.browserAction.setBadgeBackgroundColor({ color: color });
-    chrome.browserAction.setBadgeText({ text: `${number}` });
-}
-
-function handleReport(report) {
+async function handleReport(report) {
     if (!report || !report.result) {
-        return removeBadge();
+        return await removeBadge();
     }
     let errorsCount = 0;
     let warningsCount = 0;
@@ -30,30 +21,12 @@ function handleReport(report) {
     });
 
     if (errorsCount > 0) {
-        setBadge(errorsCount, '#E74C3C');
+        await setBadge(errorsCount, '#E74C3C');
     } else if (warningsCount > 0) {
-        setBadge(warningsCount, '#F39C12');
+        await setBadge(warningsCount, '#F39C12');
     } else if (noticesCount > 0) {
-        setBadge(noticesCount, '#3498DB');
+        await setBadge(noticesCount, '#3498DB');
     }
-}
-
-async function executeScript(tab, details) {
-    return await new Promise((resolve) => {
-        chrome.tabs.executeScript(tab.id, details, resolve);
-    });
-}
-
-async function addContentFile(tab, file) {
-    return await executeScript(tab, {
-        file: file,
-    });
-}
-
-async function updateSettings(tab, settings) {
-    return await executeScript(tab, {
-        code: `window.a11ygator.set(${JSON.stringify(settings)})`,
-    });
 }
 
 async function checkButtonStatus(tab) {
@@ -66,10 +39,10 @@ async function checkButtonStatus(tab) {
         return;
     }
 
-    removeBadge();
+    await removeBadge();
 
     if (tab.id in reports) {
-        handleReport(reports[tab.id]);
+        await handleReport(reports[tab.id]);
     }
 }
 
@@ -79,8 +52,8 @@ async function checkStatus(tab) {
     }
 
     await checkButtonStatus(tab);
-    await addContentFile(tab, 'content/HTMLCS.js');
-    await addContentFile(tab, 'content/runner.js');
+    await addContentFile(tab, 'lib/js/HTMLCS.js');
+    await addContentFile(tab, 'lib/js/runner.js');
     await executeScript(tab, {
         code: 'window.a11ygator.run()',
     });
@@ -90,54 +63,31 @@ async function checkStatus(tab) {
     await updateSettings(tab, settings);
 }
 
-async function getStorage(defaults = {}) {
-    return await new Promise((resolve) => {
-        chrome.storage.local.get(defaults, resolve);
-    });
-}
-
-async function getCurrentTab() {
-    return await new Promise((resolve, reject) => {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            if (!tabs.length) {
-                return reject();
-            }
-            resolve(tabs[0]);
-        });
-    })
-}
-
-async function getTabById(id) {
-    return await new Promise((resolve, reject) => {
-        chrome.tabs.get(id, (tab) => {
-            if (!tab) {
-                return reject();
-            }
-            resolve(tab);
-        });
-    });
-}
-
-async function handleMessage(request, sender, sendResponse) {
+function handleMessage(request, sender, sendResponse) {
     if (request.type === 'allygator_report' && sender.tab) {
         let report = {
             result: request.result,
             error: request.error,
         };
         reports[sender.tab.id] = report;
-        let currentTab = await getCurrentTab();
-        if (currentTab && currentTab.id === sender.tab.id) {
-            handleReport(report);
-        }
+        getCurrentTab()
+            .then((tab) => {
+                if (tab && tab.id === sender.tab.id) {
+                    return handleReport(report);
+                }
+            })
+            .catch(() => {});
     } else if (request.type === 'allygator_request') {
-        await checkStatus(request.tab);
-        sendResponse(reports[request.id]);
+        checkStatus(request.tab)
+            .then(() => sendResponse(reports[request.id]))
+            .catch(() => {});
     }
+    return true;
 }
 
 async function clearStatus(id) {
     await deleteStatus(id);
-    removeBadge();
+    await removeBadge();
     chrome.browserAction.disable(id);
 }
 

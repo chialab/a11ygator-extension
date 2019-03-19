@@ -119,53 +119,23 @@ function handleButtons() {
     }
 }
 
-async function getTabById(id) {
-    return await new Promise((resolve, reject) => {
-        chrome.tabs.get(id, (tab) => {
-            if (!tab) {
-                return reject();
+function handleMessage(request, sender) {
+    getCurrentTab()
+        .then((tab) => {
+            if (request.type === 'allygator_report' && sender.tab && sender.tab.id === tab.id) {
+                handleReport({
+                    result: request.result,
+                    error: request.error,
+                });
             }
-            resolve(tab);
-        });
-    });
+        })
+        .catch(() => {});
+    return true;
 }
 
-async function getCurrentTab() {
-    if (chrome.devtools && chrome.devtools.inspectedWindow) {
-        return await getTabById(chrome.devtools.inspectedWindow.tabId);
-    }
-    return await new Promise((resolve, reject) => {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            if (!tabs.length) {
-                return reject();
-            }
-            resolve(tabs[0]);
-        });
-    })
-}
-
-async function sendRequest() {
-    return await new Promise(async (resolve) => {
-        chrome.runtime.sendMessage({
-            type: 'allygator_request',
-            tab: await getCurrentTab(),
-        }, resolve);
-    });
-}
-
-async function handleMessage(request, sender, sendResponse) {
-    let tab = await getCurrentTab();
-    if (request.type === 'allygator_report' && sender.tab && sender.tab.id === tab.id) {
-        handleReport({
-            result: request.result,
-            error: request.error,
-        });
-    }
-}
-
+chrome.runtime.onMessage.addListener(handleMessage);
 window.addEventListener('load', async () => {
     handleButtons();
-    chrome.runtime.onMessage.addListener(handleMessage);
     let report = await sendRequest();
     await handleReport(report);
 });
