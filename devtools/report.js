@@ -7,16 +7,10 @@ function render(html) {
     window.scroll(0, 0);
 }
 
-function template(data) {
-    let issues = data
-        .slice(0)
-        .sort((issue1, issue2) => {
-            if (issue1.typeCode !== issue2.typeCode) {
-                return parseFloat(issue1.typeCode) - parseFloat(issue2.typeCode);
-            }
-            return 0;
-        });
-    return `<ul class="results-list">
+function template(issues) {
+    return `
+    ${issues.length >= 100 ? `<p class="count-warning">⚠ For performance reasons, only the first 100 issues are shown.</p>` : ''}
+    <ul class="results-list">
         ${issues.map((issue) => `
         <li class="result ${issue.type}" data-selector="${issue.selector}">
             <h2 class="issue-title">${issue.message.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</h2>
@@ -32,30 +26,30 @@ async function handleReport(response) {
         return;
     }
     if (response.result) {
-        let counts = {
-            errorCount: response.result.filter(issue => issue.type === 'error').length,
-            warningCount: response.result.filter(issue => issue.type === 'warning').length,
-            noticeCount: response.result.filter(issue => issue.type === 'notice').length
-        };
+        let counts = response.result.length >= 100 ? {
+            errors: response.result.filter(issue => issue.type === 'error').length,
+            warnings: response.result.filter(issue => issue.type === 'warning').length,
+            notices: response.result.filter(issue => issue.type === 'notice').length
+        } : response.counts;
 
         let errorsButtons = document.querySelector('button[value="errors"]');
         let warningsButtons = document.querySelector('button[value="warnings"]');
         let noticesButtons = document.querySelector('button[value="notices"]');
 
-        errorsButtons.setAttribute('data-count', counts.errorCount);
-        if (!counts.errorCount) {
+        errorsButtons.setAttribute('data-count', response.counts.errors != counts.errors ? `${counts.errors} of ${response.counts.errors}` : counts.errors);
+        if (!counts.errors) {
             errorsButtons.setAttribute('disabled', '');
         } else {
             errorsButtons.removeAttribute('disabled');
         }
-        warningsButtons.setAttribute('data-count', counts.warningCount);
-        if (!counts.warningCount) {
+        warningsButtons.setAttribute('data-count', response.counts.warnings != counts.warnings ? `${counts.warnings} of ${response.counts.warnings}` : counts.warnings);
+        if (!counts.warnings) {
             warningsButtons.setAttribute('disabled', '');
         } else {
             warningsButtons.removeAttribute('disabled');
         }
-        noticesButtons.setAttribute('data-count', counts.noticeCount);
-        if (!counts.noticeCount) {
+        noticesButtons.setAttribute('data-count', response.counts.notices != counts.notices ? `${counts.notices} of ${response.counts.notices}` : counts.notices);
+        if (!counts.notices) {
             noticesButtons.setAttribute('disabled', '');
         } else {
             noticesButtons.removeAttribute('disabled');
@@ -123,10 +117,7 @@ function handleMessage(request, sender) {
     getCurrentTab()
         .then((tab) => {
             if (request.type === 'allygator_report' && sender.tab && sender.tab.id === tab.id) {
-                handleReport({
-                    result: request.result,
-                    error: request.error,
-                });
+                handleReport(request);
             }
         })
         .catch(() => {});

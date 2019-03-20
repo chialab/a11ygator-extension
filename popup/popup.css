@@ -16,6 +16,10 @@ body {
     box-sizing: border-box;
 }
 
+a {
+    color: #0e78d5;
+}
+
 h1 {
     margin: 0;
 }

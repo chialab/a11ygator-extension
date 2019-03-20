@@ -4,28 +4,13 @@ async function handleReport(report) {
     if (!report || !report.result) {
         return await removeBadge();
     }
-    let errorsCount = 0;
-    let warningsCount = 0;
-    let noticesCount = 0;
-    report.result.forEach((issue) => {
-        switch (issue.type) {
-            case 'error':
-                errorsCount++;
-                break;
-            case 'warning':
-                warningsCount++;
-                break;
-            default:
-                noticesCount++;
-        }
-    });
 
-    if (errorsCount > 0) {
-        await setBadge(errorsCount, '#E74C3C');
-    } else if (warningsCount > 0) {
-        await setBadge(warningsCount, '#F39C12');
-    } else if (noticesCount > 0) {
-        await setBadge(noticesCount, '#3498DB');
+    if (report.counts.errors > 0) {
+        await setBadge(report.counts.errors, '#E74C3C');
+    } else if (report.counts.warnings > 0) {
+        await setBadge(report.counts.warnings, '#F39C12');
+    } else if (report.counts.notices > 0) {
+        await setBadge(report.counts.notices, '#3498DB');
     }
 }
 
@@ -65,15 +50,11 @@ async function checkStatus(tab) {
 
 function handleMessage(request, sender, sendResponse) {
     if (request.type === 'allygator_report' && sender.tab) {
-        let report = {
-            result: request.result,
-            error: request.error,
-        };
-        reports[sender.tab.id] = report;
+        reports[sender.tab.id] = request;
         getCurrentTab()
             .then((tab) => {
                 if (tab && tab.id === sender.tab.id) {
-                    return handleReport(report);
+                    return handleReport(request);
                 }
             })
             .catch(() => {});
@@ -96,6 +77,9 @@ async function deleteStatus(id) {
 }
 
 chrome.runtime.onInstalled.addListener(async () => {
+    for (let k in reports) {
+        delete reports[k];
+    }
     let currentTab = await getCurrentTab();
     await checkButtonStatus(currentTab);
 });
@@ -103,10 +87,12 @@ chrome.runtime.onInstalled.addListener(async () => {
 chrome.runtime.onMessage.addListener(handleMessage);
 
 chrome.tabs.onUpdated.addListener((id, info, tab) => {
+    deleteStatus(tab.id);
     checkButtonStatus(tab);
 });
 
 chrome.tabs.onCreated.addListener((tab) => {
+    deleteStatus(tab.id);
     checkButtonStatus(tab);
 });
 

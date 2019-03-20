@@ -6,29 +6,12 @@ function render(html) {
     }
 }
 
-function template(data) {
-    let errors = 0;
-    let warnings = 0;
-    let notices = 0;
-
-    data.forEach((issue) => {
-        switch (issue.type) {
-            case 'error':
-                errors++;
-                break;
-            case 'warning':
-                warnings++;
-                break;
-            case 'notice':
-                notices++;
-                break;
-        }
-    });
+function template(counts) {
     return `<h2>Page report</h2><p>
-        ${errors ? `<span class="errors">Errors: ${errors}</span>` : ''}
-        ${warnings ? `<span class="warnings">Warnings: ${warnings}</span>` : ''}
-        ${notices ? `<span class="notices">Notices: ${notices}</span>` : ''}
-        ${!errors && !warnings && !notices ? 'No issues detected 💪' : ''}
+        ${counts.errors ? `<span class="errors">Errors: ${counts.errors}</span>` : ''}
+        ${counts.warnings ? `<span class="warnings">Warnings: ${counts.warnings}</span>` : ''}
+        ${counts.notices ? `<span class="notices">Notices: ${counts.notices}</span>` : ''}
+        ${!counts.errors && !counts.warnings && !counts.notices ? 'No issues detected 💪' : ''}
     </p>`;
 }
 
@@ -36,8 +19,8 @@ async function handleReport(report) {
     if (!report) {
         return;
     }
-    if (report.result) {
-        render(template(report.result));
+    if (!report.error) {
+        render(template(report.counts));
     } else {
         render('');
     }
@@ -47,10 +30,7 @@ function handleMessage(request, sender) {
     getCurrentTab()
         .then((tab) => {
             if (request.type === 'allygator_report' && sender.tab && sender.tab.id === tab.id) {
-                handleReport({
-                    result: request.result,
-                    error: request.error,
-                });
+                handleReport(request);
             }
         })
         .catch(() => {});

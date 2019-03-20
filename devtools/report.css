@@ -233,3 +233,11 @@ body.inspectable .result {
 .results-list .notice {
     background-color: rgba(52, 152, 219, 0.5);
 }
+
+.count-warning {
+    padding: 0.5rem;
+    text-align: center;
+    background: #fbe3b6;
+    border-top: dashed 2px orange;
+    border-bottom: dashed 2px orange;
+}
