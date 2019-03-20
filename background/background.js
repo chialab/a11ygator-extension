@@ -24,6 +24,8 @@ async function checkButtonStatus(tab) {
         return;
     }
 
+    chrome.browserAction.enable(tab.id);
+
     await removeBadge();
 
     if (tab.id in reports) {
@@ -37,15 +39,7 @@ async function checkStatus(tab) {
     }
 
     await checkButtonStatus(tab);
-    await addContentFile(tab, 'lib/js/HTMLCS.js');
-    await addContentFile(tab, 'lib/js/runner.js');
-    await executeScript(tab, {
-        code: 'window.a11ygator.run()',
-    });
-
-    chrome.browserAction.enable(tab.id);
-    let settings = await getStorage({ standard: 'WCAG2AA' });
-    await updateSettings(tab, settings);
+    await sendRequest(tab);
 }
 
 function handleMessage(request, sender) {
