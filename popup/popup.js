@@ -39,6 +39,5 @@ function handleMessage(request, sender) {
 
 window.addEventListener('load', async () => {
     chrome.runtime.onMessage.addListener(handleMessage);
-    let report = await sendRequest();
-    await handleReport(report);
+    sendRequest(await getCurrentTab());
 });

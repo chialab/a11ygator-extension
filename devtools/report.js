@@ -8,9 +8,7 @@ function render(html) {
 }
 
 function template(issues) {
-    return `
-    ${issues.length >= 100 ? `<p class="count-warning">⚠ For performance reasons, only the first 100 issues are shown.</p>` : ''}
-    <ul class="results-list">
+    return `<ul class="results-list">
         ${issues.map((issue) => `
         <li class="result ${issue.type}" data-selector="${issue.selector}">
             <h2 class="issue-title">${issue.message.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</h2>
@@ -21,40 +19,37 @@ function template(issues) {
     </ul>`;
 }
 
+function setButtonsState(counts) {
+    let errorsButtons = document.querySelector('button[value="errors"]');
+    let warningsButtons = document.querySelector('button[value="warnings"]');
+    let noticesButtons = document.querySelector('button[value="notices"]');
+
+    errorsButtons.setAttribute('data-count', counts.errors);
+    if (!counts.errors) {
+        errorsButtons.setAttribute('disabled', '');
+    } else {
+        errorsButtons.removeAttribute('disabled');
+    }
+    warningsButtons.setAttribute('data-count', counts.warnings);
+    if (!counts.warnings) {
+        warningsButtons.setAttribute('disabled', '');
+    } else {
+        warningsButtons.removeAttribute('disabled');
+    }
+    noticesButtons.setAttribute('data-count', counts.notices);
+    if (!counts.notices) {
+        noticesButtons.setAttribute('disabled', '');
+    } else {
+        noticesButtons.removeAttribute('disabled');
+    }
+}
+
 async function handleReport(response) {
     if (!response) {
         return;
     }
     if (response.result) {
-        let counts = response.result.length >= 100 ? {
-            errors: response.result.filter(issue => issue.type === 'error').length,
-            warnings: response.result.filter(issue => issue.type === 'warning').length,
-            notices: response.result.filter(issue => issue.type === 'notice').length
-        } : response.counts;
-
-        let errorsButtons = document.querySelector('button[value="errors"]');
-        let warningsButtons = document.querySelector('button[value="warnings"]');
-        let noticesButtons = document.querySelector('button[value="notices"]');
-
-        errorsButtons.setAttribute('data-count', response.counts.errors != counts.errors ? `${counts.errors} of ${response.counts.errors}` : counts.errors);
-        if (!counts.errors) {
-            errorsButtons.setAttribute('disabled', '');
-        } else {
-            errorsButtons.removeAttribute('disabled');
-        }
-        warningsButtons.setAttribute('data-count', response.counts.warnings != counts.warnings ? `${counts.warnings} of ${response.counts.warnings}` : counts.warnings);
-        if (!counts.warnings) {
-            warningsButtons.setAttribute('disabled', '');
-        } else {
-            warningsButtons.removeAttribute('disabled');
-        }
-        noticesButtons.setAttribute('data-count', response.counts.notices != counts.notices ? `${counts.notices} of ${response.counts.notices}` : counts.notices);
-        if (!counts.notices) {
-            noticesButtons.setAttribute('disabled', '');
-        } else {
-            noticesButtons.removeAttribute('disabled');
-        }
-
+        setButtonsState(response.counts);
         render(template(response.result));
     } else {
         render('<p>Nothing to show.</p>');
@@ -93,7 +88,7 @@ function handleButtons() {
                     target.classList.remove('active');
                 } else {
                     document.querySelectorAll(`[data-selector].active`).forEach((element) => element.classList.remove('active'));
-                    chrome.devtools.inspectedWindow.eval(`inspect($$('${target.dataset.selector}')[0])`);
+                    chrome.devtools.inspectedWindow.eval(`inspect(document.querySelector('${target.dataset.selector}'))`);
                     currentSelector = target.dataset.selector;
                     target.classList.add('active');
                 }
@@ -106,7 +101,7 @@ function handleButtons() {
             }
             let target = event.target.closest('[data-selector]');
             if (target && hoverSelector !== target.dataset.selector) {
-                chrome.devtools.inspectedWindow.eval(`inspect($$('${target.dataset.selector}')[0])`);
+                chrome.devtools.inspectedWindow.eval(`inspect(document.querySelector('${target.dataset.selector}'))`);
                 hoverSelector = target.dataset.selector;
             }
         });
@@ -125,8 +120,22 @@ function handleMessage(request, sender) {
 }
 
 chrome.runtime.onMessage.addListener(handleMessage);
+
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+    if (tab.id === chrome.devtools.inspectedWindow.tabId) {
+        setButtonsState({
+            errors: 0,
+            warnings: 0,
+            notices: 0,
+        });
+        render('');
+    }
+    if (changeInfo.status == 'complete' && tab.id === chrome.devtools.inspectedWindow.tabId) {
+        sendRequest(await getCurrentTab());
+    }
+});
+
 window.addEventListener('load', async () => {
     handleButtons();
-    let report = await sendRequest();
-    await handleReport(report);
+    sendRequest(await getCurrentTab());
 });

@@ -48,7 +48,7 @@ async function checkStatus(tab) {
     await updateSettings(tab, settings);
 }
 
-function handleMessage(request, sender, sendResponse) {
+function handleMessage(request, sender) {
     if (request.type === 'allygator_report' && sender.tab) {
         reports[sender.tab.id] = request;
         getCurrentTab()
@@ -57,10 +57,6 @@ function handleMessage(request, sender, sendResponse) {
                     return handleReport(request);
                 }
             })
-            .catch(() => {});
-    } else if (request.type === 'allygator_request') {
-        checkStatus(request.tab)
-            .then(() => sendResponse(reports[request.id]))
             .catch(() => {});
     }
     return true;
@@ -77,8 +73,12 @@ async function deleteStatus(id) {
 }
 
 chrome.runtime.onInstalled.addListener(async () => {
-    for (let k in reports) {
-        delete reports[k];
+    for (let id in reports) {
+        let tab = await getTabById(id);
+        if (tab) {
+            reload(tab);
+        }
+        delete reports[id];
     }
     let currentTab = await getCurrentTab();
     await checkButtonStatus(currentTab);
@@ -99,6 +99,17 @@ chrome.tabs.onCreated.addListener((tab) => {
 chrome.tabs.onActivated.addListener(async ({ tabId }) => {
     let tab = await getTabById(tabId);
     checkButtonStatus(tab);
+});
+
+chrome.windows.onFocusChanged.addListener(async () => {
+    try {
+        let tab = await getCurrentTab();
+        if (tab && tab.id >= 0) {
+            checkButtonStatus(tab);
+        }
+    } catch (error) {
+        //
+    }
 });
 
 chrome.tabs.onRemoved.addListener((id) => {
