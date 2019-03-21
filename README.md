@@ -24,7 +24,7 @@ Get a quick report of the page from the extension popup.
 
 ### DevTools
 
-For a complete report of the page, use the Chrome DevTools section (`Elements > A11ygator`). You can inspect and live debug accessibility issues.
+For a complete report of the page, use the DevTools section (`Elements > A11ygator`). You can inspect and live debug accessibility issues.
 
 ![Devtools example](./store/inspect.gif)
 
