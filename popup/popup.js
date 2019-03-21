@@ -6,16 +6,16 @@ function render(html) {
     }
 }
 
-function template(counts) {
-    if (!counts) {
+function template(report) {
+    if (!report.counts) {
         return '';
     }
-    return `<div class="title"><h2>Page report</h2><a class="download-report">Download</a></div>
+    return `<div class="title"><h2>Page report</h2><a class="download-report" href="data: text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(report))}" download="report.json">Download</a></div>
     <p>
-        ${counts.errors ? `<span class="errors">Errors: ${counts.errors}</span>` : ''}
-        ${counts.warnings ? `<span class="warnings">Warnings: ${counts.warnings}</span>` : ''}
-        ${counts.notices ? `<span class="notices">Notices: ${counts.notices}</span>` : ''}
-        ${!counts.errors && !counts.warnings && !counts.notices ? 'No issues detected 💪' : ''}
+        ${report.counts.errors ? `<span class="errors">Errors: ${report.counts.errors}</span>` : ''}
+        ${report.counts.warnings ? `<span class="warnings">Warnings: ${report.counts.warnings}</span>` : ''}
+        ${report.counts.notices ? `<span class="notices">Notices: ${report.counts.notices}</span>` : ''}
+        ${!report.counts.errors && !report.counts.warnings && !report.counts.notices ? 'No issues detected 💪' : ''}
     </p>`;
 }
 
@@ -24,15 +24,7 @@ async function handleReport(report) {
         return;
     }
     if (!report.error) {
-        render(template(report.counts))
-        window.report = report;
-        document.querySelector('.download-report').addEventListener('click', () => {
-            const payload = `text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(window.report))}`;
-            const downloadElement = document.querySelector('.download-report');
-            downloadElement.href = `data: ${payload}`;
-            downloadElement.download = 'report.json';
-        });
-
+        render(template(report))
     } else {
         render('');
     }
