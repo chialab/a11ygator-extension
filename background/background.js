@@ -1,35 +1,14 @@
-const reports = {};
-
-async function handleReport(report) {
+async function handleReport(tab, report) {
     if (!report || !report.result) {
-        return await removeBadge();
+        return await removeBadge(tab);
     }
 
     if (report.counts.errors > 0) {
-        await setBadge(report.counts.errors, '#E74C3C');
+        await setBadge(tab, report.counts.errors, '#E74C3C');
     } else if (report.counts.warnings > 0) {
-        await setBadge(report.counts.warnings, '#F39C12');
+        await setBadge(tab, report.counts.warnings, '#F39C12');
     } else if (report.counts.notices > 0) {
-        await setBadge(report.counts.notices, '#3498DB');
-    }
-}
-
-async function checkButtonStatus(tab) {
-    if (!tab) {
-        return;
-    }
-
-    if (!tab.url || tab.url.match(/^chrome:/)) {
-        await clearStatus(tab.id);
-        return;
-    }
-
-    chrome.browserAction.enable(tab.id);
-
-    await removeBadge();
-
-    if (tab.id in reports) {
-        await handleReport(reports[tab.id]);
+        await setBadge(tab, report.counts.notices, '#3498DB');
     }
 }
 
@@ -38,74 +17,43 @@ async function checkStatus(tab) {
         return;
     }
 
-    await checkButtonStatus(tab);
-    await sendRequest(tab);
+    if (!tab.url || tab.url.match(/^chrome:/)) {
+        await clearStatus(tab);
+        return;
+    }
+
+    chrome.browserAction.enable(tab.id);
+    await sendRequest(tab, false);
 }
 
 function handleMessage(request, sender) {
     if (request.type === 'allygator_report' && sender.tab) {
-        reports[sender.tab.id] = request;
-        getCurrentTab()
-            .then((tab) => {
-                if (tab && tab.id === sender.tab.id) {
-                    return handleReport(request);
-                }
-            })
-            .catch(() => {});
+        handleReport(sender.tab, request)
     }
     return true;
 }
 
-async function clearStatus(id) {
-    await deleteStatus(id);
-    await removeBadge();
-    chrome.browserAction.disable(id);
-}
-
-async function deleteStatus(id) {
-    delete reports[id];
+async function clearStatus(tab) {
+    await removeBadge(tab);
+    chrome.browserAction.disable(tab.id);
 }
 
 chrome.runtime.onInstalled.addListener(async () => {
-    for (let id in reports) {
-        let tab = await getTabById(id);
-        if (tab) {
-            reload(tab);
-        }
-        delete reports[id];
-    }
     let currentTab = await getCurrentTab();
-    await checkButtonStatus(currentTab);
+    await checkStatus(currentTab);
 });
 
 chrome.runtime.onMessage.addListener(handleMessage);
 
 chrome.tabs.onUpdated.addListener((id, info, tab) => {
-    deleteStatus(tab.id);
-    checkButtonStatus(tab);
+    checkStatus(tab);
 });
 
 chrome.tabs.onCreated.addListener((tab) => {
-    deleteStatus(tab.id);
-    checkButtonStatus(tab);
+    checkStatus(tab);
 });
 
 chrome.tabs.onActivated.addListener(async ({ tabId }) => {
     let tab = await getTabById(tabId);
-    checkButtonStatus(tab);
-});
-
-chrome.windows.onFocusChanged.addListener(async () => {
-    try {
-        let tab = await getCurrentTab();
-        if (tab && tab.id >= 0) {
-            checkButtonStatus(tab);
-        }
-    } catch (error) {
-        //
-    }
-});
-
-chrome.tabs.onRemoved.addListener((id) => {
-    deleteStatus(id);
+    checkStatus(tab);
 });

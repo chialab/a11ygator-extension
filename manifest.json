@@ -27,6 +27,6 @@
   "permissions": [
     "<all_urls>",
     "storage",
-    "tabs"
+    "activeTab"
   ]
 }
