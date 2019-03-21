@@ -50,7 +50,7 @@ Run `make pack` in the root of the project.
 
 #### Firefox Add-on Developer Hub
 
-* Navigate to https://addons.mozilla.org/en-US/developers/[https://addons.mozilla.org/en-US/developers/].
+* Navigate to [https://addons.mozilla.org/en-US/developers/](https://addons.mozilla.org/en-US/developers/).
 * Click the version status label of the A11ygator item.
 * Upload a new version.
 * Publish.
