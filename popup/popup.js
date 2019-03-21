@@ -7,6 +7,9 @@ function render(html) {
 }
 
 function template(counts) {
+    if (!counts) {
+        return '';
+    }
     return `<h2>Page report</h2><p>
         ${counts.errors ? `<span class="errors">Errors: ${counts.errors}</span>` : ''}
         ${counts.warnings ? `<span class="warnings">Warnings: ${counts.warnings}</span>` : ''}
