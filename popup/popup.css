@@ -18,7 +18,7 @@ body {
 }
 
 a {
-    color: black;
+    color: #2282c3;
     cursor: pointer;
 }
 
@@ -78,14 +78,17 @@ p {
     margin: 0 0 0 1em;
     font-weight: 500;
     border: none;
-    background-color: black;
+    background-color: #42513f;
     color: white;
-    border-radius: 15px;
     cursor: pointer;
     font-size: 12px;
     padding: 0.5em;
     line-height: 1em;
     text-decoration: none;
+}
+
+.download-report:hover {
+    background-color: #2282c3;
 }
 
 
