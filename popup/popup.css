@@ -18,7 +18,8 @@ body {
 }
 
 a {
-    color: #0e78d5;
+    color: #2282c3;
+    cursor: pointer;
 }
 
 h1 {
@@ -33,10 +34,12 @@ hr {
 
 h2 {
     font-size: 1rem;
-    margin-bottom: 0;
+    margin: 0;
+    line-height: 1.5em;
 }
 
 p {
+    margin-top: 0.5em;
     line-height: 1.5em;
 }
 
@@ -61,3 +64,31 @@ p {
 #report:not(:empty) + #loader {
     display: none;
 }
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.title {
+    display: flex;
+}
+
+.download-report {
+    margin: 0 0 0 1em;
+    font-weight: 500;
+    border: none;
+    background-color: #42513f;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0.5em;
+    line-height: 1em;
+    text-decoration: none;
+}
+
+.download-report:hover {
+    background-color: #2282c3;
+}
+
+
