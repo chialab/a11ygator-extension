@@ -17,13 +17,12 @@ async function checkStatus(tab) {
         return;
     }
 
-    if (!tab.url || tab.url.match(/^chrome:/)) {
+    try {
+        await sendRequest(tab, false);
+        chrome.browserAction.enable(tab.id);
+    } catch(error) {
         await clearStatus(tab);
-        return;
     }
-
-    chrome.browserAction.enable(tab.id);
-    await sendRequest(tab, false);
 }
 
 function handleMessage(request, sender) {
