@@ -4,6 +4,7 @@
 <h1 align="center">A11ygator</h1>
 <p align="center">
     <a href="https://chrome.google.com/webstore/detail/a11ygator/imfmlpemomjmfncnmkjdeeinbkichaio">Chrome extension</a> |
+    <a href="https://addons.mozilla.org/it/firefox/addon/a11ygator">Firefox extension</a> |
     <a href="https://www.w3.org/WAI/standards-guidelines/wcag/">WCAG home</a> |
     <a href="https://github.com/chialab/a11ygator-extension">Source</a> |
     <a href="https://www.chialab.io">Authors</a>
@@ -33,29 +34,25 @@ You can change the WCAG standard for validation (default is WCAG2AA). Right-clic
 
 ## Development
 
-Check out the repository and [load the unpacked extension](https://developer.chrome.com/extensions/getstarted).
-
-### Build
-
-#### Chrome extension
-
-Create a `.crx` file:
-
-* Navigate to `chrome://extensions/`.
-* Click "Pack extension" and browse to the repository.
-* Click the "Pack extension" button.
-
-Build for publication:
-
-* Run `make pack` in the root of the project
+* [How to load an unpacked extension in Chrome](https://developer.chrome.com/extensions/getstarted)
+* [How to load an unpacked extension in Firefox](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Temporary_Installation_in_Firefox)
 
 ### Publish
+
+Run `make pack` in the root of the project.
 
 #### Chrome store
 
 * Navigate to [https://chrome.google.com/webstore/developer/dashboard](https://chrome.google.com/webstore/developer/dashboard).
 * Edit the A11ygator item.
 * Upload the zip file.
+* Publish.
+
+#### Firefox Add-on Developer Hub
+
+* Navigate to https://addons.mozilla.org/en-US/developers/[https://addons.mozilla.org/en-US/developers/].
+* Click the version status label of the A11ygator item.
+* Upload a new version.
 * Publish.
 
 ## Credits
