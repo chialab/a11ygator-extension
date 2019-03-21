@@ -19,7 +19,7 @@ async function checkStatus(tab) {
 
     try {
         await sendRequest(tab, false);
-        chrome.browserAction.enable(tab.id);
+        browser.browserAction.enable(tab.id);
     } catch(error) {
         await clearStatus(tab);
     }
@@ -34,25 +34,25 @@ function handleMessage(request, sender) {
 
 async function clearStatus(tab) {
     await removeBadge(tab);
-    chrome.browserAction.disable(tab.id);
+    browser.browserAction.disable(tab.id);
 }
 
-chrome.runtime.onInstalled.addListener(async () => {
+browser.runtime.onInstalled.addListener(async () => {
     let currentTab = await getCurrentTab();
     await checkStatus(currentTab);
 });
 
-chrome.runtime.onMessage.addListener(handleMessage);
+browser.runtime.onMessage.addListener(handleMessage);
 
-chrome.tabs.onUpdated.addListener((id, info, tab) => {
+browser.tabs.onUpdated.addListener((id, info, tab) => {
     checkStatus(tab);
 });
 
-chrome.tabs.onCreated.addListener((tab) => {
+browser.tabs.onCreated.addListener((tab) => {
     checkStatus(tab);
 });
 
-chrome.tabs.onActivated.addListener(async ({ tabId }) => {
+browser.tabs.onActivated.addListener(async ({ tabId }) => {
     let tab = await getTabById(tabId);
     checkStatus(tab);
 });

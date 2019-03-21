@@ -72,7 +72,7 @@ function handleButtons() {
         });
     });
 
-    if (chrome.devtools && chrome.devtools.inspectedWindow) {
+    if (browser.devtools && browser.devtools.inspectedWindow) {
         document.body.classList.add('inspectable');
 
         window.addEventListener('focus', () => {
@@ -119,10 +119,10 @@ function handleMessage(request, sender) {
     return true;
 }
 
-chrome.runtime.onMessage.addListener(handleMessage);
+browser.runtime.onMessage.addListener(handleMessage);
 
-chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-    if (tab.id === chrome.devtools.inspectedWindow.tabId) {
+browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+    if (tab.id === browser.devtools.inspectedWindow.tabId) {
         setButtonsState({
             errors: 0,
             warnings: 0,
@@ -130,7 +130,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         });
         render('');
     }
-    if (changeInfo.status == 'complete' && tab.id === chrome.devtools.inspectedWindow.tabId) {
+    if (changeInfo.status == 'complete' && tab.id === browser.devtools.inspectedWindow.tabId) {
         sendRequest(await getCurrentTab());
     }
 });

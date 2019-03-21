@@ -15,8 +15,6 @@ A11ygator is a free tool for web developers to check compliance with the WCAG ru
 
 Thanks to the integration with DevTools, it is easy to inspect elements and quickly update CSS rules or HTML attributes in order to match the required WCAG standard.
 
-At the moment, this extension is available for Chrome only.
-
 ### Quick validation
 
 Get a quick report of the page from the extension popup.
@@ -39,6 +37,8 @@ Check out the repository and [load the unpacked extension](https://developer.chr
 
 ### Build
 
+#### Chrome extension
+
 Create a `.crx` file:
 
 * Navigate to `chrome://extensions/`.
@@ -50,6 +50,8 @@ Build for publication:
 * Run `make pack` in the root of the project
 
 ### Publish
+
+#### Chrome store
 
 * Navigate to [https://chrome.google.com/webstore/developer/dashboard](https://chrome.google.com/webstore/developer/dashboard).
 * Edit the A11ygator item.

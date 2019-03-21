@@ -1,7 +1,7 @@
 (() => {
     const form = document.querySelector('form');
 
-    chrome.storage.local.get({
+    browser.storage.local.get({
         standard: 'WCAG2AA',
     }, (settings) => {
         for (let key in settings) {
@@ -14,6 +14,6 @@
             standard: form.elements.standard.value,
         };
 
-        chrome.storage.local.set(data, () => {});
+        browser.storage.local.set(data, () => {});
     });
 })();

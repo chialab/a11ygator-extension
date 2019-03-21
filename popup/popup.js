@@ -41,6 +41,6 @@ function handleMessage(request, sender) {
 }
 
 window.addEventListener('load', async () => {
-    chrome.runtime.onMessage.addListener(handleMessage);
+    browser.runtime.onMessage.addListener(handleMessage);
     sendRequest(await getCurrentTab());
 });
