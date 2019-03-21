@@ -10,7 +10,8 @@ function template(counts) {
     if (!counts) {
         return '';
     }
-    return `<h2>Page report</h2><p>
+    return `<div class="title"><h2>Page report</h2><a class="download-report">Download</a></div>
+    <p>
         ${counts.errors ? `<span class="errors">Errors: ${counts.errors}</span>` : ''}
         ${counts.warnings ? `<span class="warnings">Warnings: ${counts.warnings}</span>` : ''}
         ${counts.notices ? `<span class="notices">Notices: ${counts.notices}</span>` : ''}
@@ -23,7 +24,15 @@ async function handleReport(report) {
         return;
     }
     if (!report.error) {
-        render(template(report.counts));
+        render(template(report.counts))
+        window.report = report;
+        document.querySelector('.download-report').addEventListener('click', () => {
+            const payload = `text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(window.report))}`;
+            const downloadElement = document.querySelector('.download-report');
+            downloadElement.href = `data: ${payload}`;
+            downloadElement.download = 'report.json';
+        });
+
     } else {
         render('');
     }
