@@ -42,5 +42,6 @@ function handleMessage(request, sender) {
 
 window.addEventListener('load', async () => {
     browser.runtime.onMessage.addListener(handleMessage);
-    sendRequest(await getCurrentTab());
+    let tab = await getCurrentTab();
+    sendRequest(tab);
 });

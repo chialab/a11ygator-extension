@@ -108,10 +108,10 @@ function handleButtons() {
     }
 }
 
-function handleMessage(request, sender) {
+function handleMessage(request) {
     getCurrentTab()
         .then((tab) => {
-            if (request.type === 'allygator_report' && sender.tab && sender.tab.id === tab.id) {
+            if (request.type === 'allygator_devtools_report' && request.tab.id === tab.id) {
                 handleReport(request);
             }
         })
@@ -121,21 +121,24 @@ function handleMessage(request, sender) {
 
 browser.runtime.onMessage.addListener(handleMessage);
 
-browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-    if (tab.id === browser.devtools.inspectedWindow.tabId) {
-        setButtonsState({
-            errors: 0,
-            warnings: 0,
-            notices: 0,
-        });
-        render('');
-    }
-    if (changeInfo.status == 'complete' && tab.id === browser.devtools.inspectedWindow.tabId) {
-        sendRequest(await getCurrentTab());
-    }
-});
+if (browser.tabs) {
+    browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+        if (tab.id === browser.devtools.inspectedWindow.tabId) {
+            setButtonsState({
+                errors: 0,
+                warnings: 0,
+                notices: 0,
+            });
+            render('');
+        }
+        if (changeInfo.status == 'complete' && tab.id === browser.devtools.inspectedWindow.tabId) {
+            sendRequest(await getCurrentTab());
+        }
+    });
+}
 
 window.addEventListener('load', async () => {
     handleButtons();
-    sendRequest(await getCurrentTab());
+    let tab = await getCurrentTab();
+    sendRequest(tab);
 });

@@ -27,7 +27,18 @@ async function checkStatus(tab) {
 
 function handleMessage(request, sender) {
     if (request.type === 'allygator_report' && sender.tab) {
-        handleReport(sender.tab, request)
+        handleReport(sender.tab, request);
+        sendRuntimeMessage({
+            type: 'allygator_devtools_report',
+            result: request.result,
+            error: request.error,
+            counts: request.counts,
+            tab: {
+                id: sender.tab.id,
+            },
+        });
+    } else if (request.type === 'allygator_devtools_request') {
+        sendRequest(request.tab);
     }
     return true;
 }

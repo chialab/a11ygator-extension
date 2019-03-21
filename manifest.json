@@ -7,6 +7,19 @@
   "icons": {
     "128": "resources/icon.png"
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*",
+        "file:///*"
+      ],
+      "js": [
+        "lib/js/HTMLCS.js",
+        "lib/js/runner.js"
+      ]
+    }
+  ],
   "browser_action": {
     "default_popup": "popup/popup.html",
     "default_icon": {
@@ -23,12 +36,12 @@
       "background/background.js"
     ]
   },
-  "devtools_page": "devtools/devtools.html",
+  "devtools_page": "/devtools/devtools.html",
   "permissions": [
     "storage",
     "activeTab",
-    "http://*/",
-    "https://*/",
-    "file://*"
+    "http://*/*",
+    "https://*/*",
+    "file:///*"
   ]
 }

@@ -8,6 +8,7 @@ html, body {
 body {
     padding: 1rem;
     width: 20rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 *,
