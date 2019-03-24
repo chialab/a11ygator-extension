@@ -39,9 +39,6 @@
   "devtools_page": "/devtools/devtools.html",
   "permissions": [
     "storage",
-    "activeTab",
-    "http://*/*",
-    "https://*/*",
-    "file:///*"
+    "activeTab"
   ]
 }
