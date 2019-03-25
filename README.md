@@ -39,21 +39,9 @@ You can change the WCAG standard for validation (default is WCAG2AA). Right-clic
 
 ### Publish
 
-Run `make pack` in the root of the project.
-
-#### Chrome store
-
-* Navigate to [https://chrome.google.com/webstore/developer/dashboard](https://chrome.google.com/webstore/developer/dashboard).
-* Edit the A11ygator item.
-* Upload the zip file.
-* Publish.
-
-#### Firefox Add-on Developer Hub
-
-* Navigate to [https://addons.mozilla.org/en-US/developers/](https://addons.mozilla.org/en-US/developers/).
-* Click the version status label of the A11ygator item.
-* Upload a new version.
-* Publish.
+* Run `make pack` in the root of the project
+* [How to publish an extension to Chrome Web Store](https://developers.chrome.com/webstore/publish)
+* [How to publish an add-on to Firefox Add-on Developer Hub](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Distribution/Submitting_an_add-on)
 
 ## Credits
 
