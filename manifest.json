@@ -3,6 +3,13 @@
   "description": "Validate the accessibility of your website against W3C's Web Content Accessibility Guidelines.",
   "manifest_version": 2,
   "version": "1.5",
+  "minimum_chrome_version": "55",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{72a61bd6-e538-456c-8208-4700b7208f2c}",
+      "strict_min_version": "52.0"
+    }
+  },
   "icons": {
     "128": "resources/icon.png"
   },
