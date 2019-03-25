@@ -33,7 +33,7 @@ async function handleReport(report) {
 function handleMessage(request, sender) {
     getCurrentTab()
         .then((tab) => {
-            if (request.type === 'allygator_report' && sender.tab && sender.tab.id === tab.id) {
+            if (request.type === 'a11ygator_report' && sender.tab && sender.tab.id === tab.id) {
                 handleReport(request);
             }
         })

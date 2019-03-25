@@ -111,7 +111,7 @@ function handleButtons() {
 function handleMessage(request) {
     getCurrentTab()
         .then((tab) => {
-            if (request.type === 'allygator_devtools_report' && request.tab.id === tab.id) {
+            if (request.type === 'a11ygator_devtools_report' && request.tab.id === tab.id) {
                 handleReport(request);
             }
         })
@@ -120,6 +120,24 @@ function handleMessage(request) {
 }
 
 browser.runtime.onMessage.addListener(handleMessage);
+
+if (browser.devtools.inspectedWindow) {
+    if (browser.devtools.inspectedWindow.onResourceAdded) {
+        browser.devtools.inspectedWindow.onResourceAdded.addListener(async () => {
+            handleButtons();
+            let tab = await getCurrentTab();
+            sendRequest(tab, true, true);
+        });
+    }
+
+    if (browser.devtools.inspectedWindow.onResourceContentCommitted) {
+        browser.devtools.inspectedWindow.onResourceContentCommitted.addListener(async () => {
+            handleButtons();
+            let tab = await getCurrentTab();
+            sendRequest(tab, true, true);
+        });
+    }
+}
 
 if (browser.tabs) {
     browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {

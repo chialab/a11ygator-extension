@@ -26,10 +26,10 @@ async function checkStatus(tab) {
 }
 
 function handleMessage(request, sender) {
-    if (request.type === 'allygator_report' && sender.tab) {
+    if (request.type === 'a11ygator_report' && sender.tab) {
         handleReport(sender.tab, request);
         sendRuntimeMessage({
-            type: 'allygator_devtools_report',
+            type: 'a11ygator_devtools_report',
             result: request.result,
             error: request.error,
             counts: request.counts,
@@ -37,8 +37,8 @@ function handleMessage(request, sender) {
                 id: sender.tab.id,
             },
         });
-    } else if (request.type === 'allygator_devtools_request') {
-        sendRequest(request.tab);
+    } else if (request.type === 'a11ygator_devtools_request') {
+        sendRequest(request.tab, request.run, request.refresh);
     }
     return true;
 }
