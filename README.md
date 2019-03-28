@@ -5,7 +5,8 @@
 <p align="center">
     <a href="https://chrome.google.com/webstore/detail/a11ygator/imfmlpemomjmfncnmkjdeeinbkichaio">Chrome extension</a> |
     <a href="https://addons.mozilla.org/it/firefox/addon/a11ygator">Firefox extension</a> |
-    <a href="https://www.w3.org/WAI/standards-guidelines/wcag/">WCAG home</a> |
+    <a href="https://github.com/chialab/a11ygator-app">WebApp</a> |
+    <a href="https://www.w3.org/WAI/standards-guidelines/wcag/">WCAG</a> |
     <a href="https://github.com/chialab/a11ygator-extension">Source</a> |
     <a href="https://www.chialab.io">Authors</a>
 </p>
@@ -50,3 +51,7 @@ A11ygator runs on the top of [HTML Code Sniffer](https://github.com/squizlabs/HT
 ## License
 
 A11ygator is released under the [MIT](./LICENSE) license.
+
+## More
+
+Also check out [A11ygator WebApp](https://github.com/chialab/a11ygator-app).
