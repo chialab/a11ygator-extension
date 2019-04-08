@@ -17,6 +17,8 @@ A11ygator is a free tool for web developers to check compliance with the WCAG ru
 
 Thanks to the integration with DevTools, it is easy to inspect elements and quickly update CSS rules or HTML attributes in order to match the required WCAG standard.
 
+Not so comfortable with dev tools? **Check out the [Web version](http://a11ygator.chialab.io)**.
+
 ### Quick validation
 
 Get a quick report of the page from the extension popup.
@@ -44,6 +46,10 @@ You can change the WCAG standard for validation (default is WCAG2AA). Right-clic
 * [How to publish an extension to Chrome Web Store](https://developers.chrome.com/webstore/publish)
 * [How to publish an add-on to Firefox Add-on Developer Hub](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Distribution/Submitting_an_add-on)
 
+## More
+
+Also check out [A11ygator WebApp Repository](https://github.com/chialab/a11ygator-app).
+
 ## Credits
 
 A11ygator runs on the top of [HTML Code Sniffer](https://github.com/squizlabs/HTML_CodeSniffer) powered by Squiz Labs.
@@ -51,7 +57,3 @@ A11ygator runs on the top of [HTML Code Sniffer](https://github.com/squizlabs/HT
 ## License
 
 A11ygator is released under the [MIT](./LICENSE) license.
-
-## More
-
-Also check out [A11ygator WebApp](https://github.com/chialab/a11ygator-app).
