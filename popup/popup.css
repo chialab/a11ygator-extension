@@ -91,4 +91,29 @@ p {
     background-color: #1b7bbc;
 }
 
+.signature {
+    display: flex;
+    justify-content: space-between;
+}
+
+.signature a {
+    text-decoration: none;
+    color: black;
+    font-size: 0.85em;
+}
+
+.signature span {
+    margin-right: .5em;
+}
+
+.signature svg {
+    height: 1em;
+    width: 1.5em;
+}
+
+.signature .source {
+    color: #1b7bbc;
+    text-decoration: underline;
+    font-size: 1em;
+}
 
