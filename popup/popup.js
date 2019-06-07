@@ -1,22 +1,62 @@
-function render(html) {
+function render(nodes) {
     const frame = document.getElementById('report');
 
-    if (frame.innerHTML !== html) {
-        frame.innerHTML = html;
-    }
+    frame.childNodes.forEach((node) => {
+        frame.removeChild(node);
+    });
+
+    nodes.forEach((node) => {
+        frame.appendChild(node);
+    });
 }
 
 function template(report) {
     if (!report.counts) {
-        return '';
+        return [];
     }
-    return `<div class="title"><h2>Page report</h2><a class="download-report" href="data: text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(report))}" download="report.json">Download</a></div>
-    <p>
-        ${report.counts.errors ? `<span class="errors">Errors: ${report.counts.errors}</span>` : ''}
-        ${report.counts.warnings ? `<span class="warnings">Warnings: ${report.counts.warnings}</span>` : ''}
-        ${report.counts.notices ? `<span class="notices">Notices: ${report.counts.notices}</span>` : ''}
-        ${!report.counts.errors && !report.counts.warnings && !report.counts.notices ? 'No issues detected 💪' : ''}
-    </p>`;
+
+    const div = document.createElement('div');
+    div.classList.add('title');
+
+    const h2 = document.createElement('h2');
+    h2.innerText = 'Page report';
+
+    const a = document.createElement('a');
+    a.classList.add('download-report');
+    a.href = `data: text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(report))}`;
+    a.setAttribute('download', 'report.json');
+    a.innerText = 'Download';
+
+    div.appendChild(h2);
+    div.appendChild(a);
+
+    const p = document.createElement('p');
+    if (report.counts.errors) {
+        const span = document.createElement('span');
+        span.classList.add('errors');
+        span.innerText = `Errors: ${report.counts.errors}`;
+        p.appendChild(span);
+    }
+
+    if (report.counts.warnings) {
+        const span = document.createElement('span');
+        span.classList.add('warnings');
+        span.innerText = `Warnings: ${report.counts.warnings}`;
+        p.appendChild(span);
+    }
+
+    if (report.counts.notices) {
+        const span = document.createElement('span');
+        span.classList.add('notices');
+        span.innerText = `Notices: ${report.counts.notices}`;
+        p.appendChild(span);
+    }
+
+    if (!report.counts.errors && !report.counts.warnings && !report.counts.notices) {
+        p.innerText = 'No issues detected 💪';
+    }
+
+    return [div, p];
 }
 
 async function handleReport(report) {
@@ -26,7 +66,7 @@ async function handleReport(report) {
     if (!report.error) {
         render(template(report))
     } else {
-        render('');
+        render();
     }
 }
 
