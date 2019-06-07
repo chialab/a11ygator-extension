@@ -1,22 +1,47 @@
-function render(html) {
+function render(...nodes) {
     const frame = document.getElementById('report');
 
-    if (frame.innerHTML !== html) {
-        frame.innerHTML = html;
-    }
+    frame.childNodes.forEach((node) => {
+        frame.removeChild(node);
+    });
+    nodes.forEach((node) => {
+        frame.appendChild(node);
+    });
     window.scroll(0, 0);
 }
 
 function template(issues) {
-    return `<ul class="results-list">
-        ${issues.map((issue) => `
-        <li class="result ${issue.type}" data-selector="${issue.selector}">
-            <h2 class="issue-title">${issue.message.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</h2>
-            <p class="issue-rule">${issue.code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>
-            <pre class="issue-code"><code>${(issue.context || '').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>
-        </li>
-        `).join('\n')}
-    </ul>`;
+    const ul = document.createElement('ul');
+    ul.classList.add('results-list');
+
+    issues.forEach((issue) => {
+        const li = document.createElement('li');
+        li.classList.add('result', issue.type);
+        li.setAttribute('data-selector', issue.selector);
+
+        const h2 = document.createElement('h2');
+        h2.classList.add(`issue-title`);
+        h2.innerText = issue.message;
+
+        const p = document.createElement('p');
+        p.classList.add('issue-role');
+        p.innerText = issue.code;
+
+        const pre = document.createElement('pre');
+        pre.classList.add('issue-code');
+
+        const code = documen.createElement('code');
+        code.innerText = issue.context || '';
+
+        pre.appendChild(code);
+        li.appendChild(h2);
+        li.appendChild(p);
+        li.appendChild(pre);
+
+        ul.appendChild(li);
+    });
+
+    return ul;
 }
 
 function setButtonsState(counts) {
@@ -52,7 +77,9 @@ async function handleReport(response) {
         setButtonsState(response.counts);
         render(template(response.result));
     } else {
-        render('<p>Nothing to show.</p>');
+        const p = document.createElement('p');
+        p.innerText = 'Nothing to show.';
+        render(p);
     }
 }
 
@@ -147,7 +174,7 @@ if (browser.tabs) {
                 warnings: 0,
                 notices: 0,
             });
-            render('');
+            render();
         }
         if (changeInfo.status == 'complete' && tab.id === browser.devtools.inspectedWindow.tabId) {
             sendRequest(await getCurrentTab());
