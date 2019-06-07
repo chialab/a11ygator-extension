@@ -2,7 +2,7 @@
   "name": "A11ygator",
   "description": "Validate the accessibility of your website against W3C's Web Content Accessibility Guidelines.",
   "manifest_version": 2,
-  "version": "1.9",
+  "version": "1.10",
   "minimum_chrome_version": "55",
   "browser_specific_settings": {
     "gecko": {
