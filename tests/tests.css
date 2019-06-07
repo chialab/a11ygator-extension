@@ -1,0 +1,66 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    padding: 1rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+a {
+    color: #1b7bbc;
+    cursor: pointer;
+}
+
+h1 {
+    margin: 0;
+}
+
+hr {
+    margin: 1rem 0 0.5rem 0;
+    border: 0;
+    border-bottom: solid 1px #ccc;
+}
+
+h2 {
+    font-size: 1rem;
+    margin: 0;
+    line-height: 1.5em;
+}
+
+p {
+    margin-top: 0.5em;
+    line-height: 1.5em;
+}
+
+/**
+* Test elements
+*/
+#test-list {
+    list-style: none;
+}
+
+#test-list li {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.test-text {
+    font-size: 25px;
+}
+
+.test-result {
+    padding: 0.5rem;
+    box-shadow: 1px 1px 10px #171717;
+}
+
+.good {
+    background: rgb(50, 180, 50);
+    color: #fff;
+}
+
+.bad {
+    background: rgb(180, 50, 50);
+    color: #fff;
+}
