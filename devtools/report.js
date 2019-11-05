@@ -30,7 +30,7 @@ function template(issues) {
         const pre = document.createElement('pre');
         pre.classList.add('issue-code');
 
-        const code = documen.createElement('code');
+        const code = document.createElement('code');
         code.innerText = issue.context || '';
 
         pre.appendChild(code);
@@ -149,14 +149,6 @@ function handleMessage(request) {
 browser.runtime.onMessage.addListener(handleMessage);
 
 if (browser.devtools.inspectedWindow) {
-    if (browser.devtools.inspectedWindow.onResourceAdded) {
-        browser.devtools.inspectedWindow.onResourceAdded.addListener(async () => {
-            handleButtons();
-            let tab = await getCurrentTab();
-            sendRequest(tab, true, true);
-        });
-    }
-
     if (browser.devtools.inspectedWindow.onResourceContentCommitted) {
         browser.devtools.inspectedWindow.onResourceContentCommitted.addListener(async () => {
             handleButtons();

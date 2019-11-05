@@ -1,9 +1,17 @@
 function render(nodes) {
     const frame = document.getElementById('report');
 
+    if (!frame) {
+        return;
+    }
+
     frame.childNodes.forEach((node) => {
         frame.removeChild(node);
     });
+
+    if (!nodes) {
+        return;
+    }
 
     nodes.forEach((node) => {
         frame.appendChild(node);
@@ -64,6 +72,7 @@ async function handleReport(report) {
         return;
     }
     if (!report.error) {
+        render();
         render(template(report))
     } else {
         render();
