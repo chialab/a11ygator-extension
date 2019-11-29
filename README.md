@@ -4,7 +4,6 @@
 <h1 align="center">A11ygator</h1>
 <p align="center">
     <a href="https://chrome.google.com/webstore/detail/a11ygator/imfmlpemomjmfncnmkjdeeinbkichaio">Chrome extension</a> |
-    <a href="https://addons.mozilla.org/it/firefox/addon/a11ygator">Firefox extension</a> |
     <a href="https://github.com/chialab/a11ygator-app">WebApp</a> |
     <a href="https://www.w3.org/WAI/standards-guidelines/wcag/">WCAG</a> |
     <a href="https://github.com/chialab/a11ygator-extension">Source</a> |
