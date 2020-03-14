@@ -1,16 +1,23 @@
 <p align="center">
-    <img src="resources/icon.png" width="100">
-</p>
-<h1 align="center">A11ygator</h1>
-<p align="center">
-    <a href="https://chrome.google.com/webstore/detail/a11ygator/imfmlpemomjmfncnmkjdeeinbkichaio">Chrome extension</a> |
-    <a href="https://github.com/chialab/a11ygator-app">WebApp</a> |
-    <a href="https://www.w3.org/WAI/standards-guidelines/wcag/">WCAG</a> |
-    <a href="https://github.com/chialab/a11ygator-extension">Source</a> |
-    <a href="https://www.chialab.io">Authors</a>
+    <a href="https://www.chialab.io/p/a11ygator-extension">
+        <img alt="Allygator logo" width="144" height="144" src="https://raw.githack.com/chialab/a11ygator-extension/master/logo.svg" />
+    </a>
 </p>
 
-Validate the accessibility of your website against W3C's Web Content Accessibility Guidelines.
+<p align="center">
+  <strong>A11ygator</strong> • Validate the accessibility of your website against W3C's Web Content Accessibility Guidelines.
+</p>
+
+
+<p align="center">
+    <a href="https://chrome.google.com/webstore/detail/a11ygator/imfmlpemomjmfncnmkjdeeinbkichaio">Chrome extension</a> |
+    <a href="https://github.com/chialab/a11ygator-extension">Source</a> |
+    <a href="https://www.chialab.io/p/a11ygator-app">WebApp</a> |
+    <a href="https://www.w3.org/WAI/standards-guidelines/wcag/">WCAG</a> |
+    <a href="https://www.chialab.it">Authors</a>
+</p>
+
+---
 
 A11ygator is a free tool for web developers to check compliance with the WCAG rules. Once the extension has started, it will observe for content changes in the HTML document and it will generate a report with errors, warnings and notices.
 
